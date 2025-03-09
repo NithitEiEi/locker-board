@@ -18,14 +18,14 @@ const char keys[4][3] = {
   {'*', '0', '#'}
 };
 
-const char* ssid = "****";
-const char* pass = "****";
+const char* ssid = "";
+const char* pass = "";
 
-const char *mqtt_broker = "****";
-const char *mqtt_client = "****";
-const char *mqtt_username = "****";
-const char *mqtt_password = "****";
-const int mqtt_port = ****;
+const char *mqtt_broker = "";
+const char *mqtt_client = "";
+const char *mqtt_username = "";
+const char *mqtt_password = "";
+const int mqtt_port = 1884;
 
 WiFiClientSecure espClient;
 HTTPClient http;
@@ -36,13 +36,12 @@ struct Locker {
   int door;
   int light;
   int reed;
-  String pass;
 };
 
-String enteredID = "";  // Stores the entered ID
-String enteredPass = "";  // Stores the entered password
-bool enteringID = true;  // Flag to control ID and Password entry
-bool resetFlag = false;  // Flag to reset after input
+String enteredID = "";
+String enteredPass = "";
+bool enteringID = true;
+bool resetFlag = false;
 String passMask = "";
 
 Locker lockers[11];
@@ -77,9 +76,6 @@ void setup() {
   lockers[4].door = 15;
   lockers[4].reed = 12;
   lockers[4].light = 2;
-  
-  lockers[1].pass = "1234";
-  lockers[4].pass = "1239";
 
   pinMode(lockers[1].reed, INPUT_PULLUP);
   pinMode(lockers[1].light, OUTPUT);
@@ -98,7 +94,7 @@ void setup() {
   lcd.print("Locker ");
   
   Wire.beginTransmission(PCF8574_KEYPAD);
-  Wire.write(0xFF);  // Set all pins HIGH
+  Wire.write(0xFF);
   Wire.endTransmission();
 }
 
@@ -224,6 +220,7 @@ void openDoor(int index, int state) {
 void checkPassword() {
   lcd.clear();
   lcd.setCursor(0, 0);
+  lcd.print("loading..");
 
   bool found = false;
 
@@ -259,6 +256,15 @@ void checkPassword() {
           lcd.setCursor(0, 1);
           lcd.print("Incorrect");
           delay(5000);
+        }
+
+        if (message == "unlock complete") {
+          lcd.clear();
+          lcd.setCursor(0, 0);
+          lcd.print("Locker " + lockers[i].id);
+          lcd.setCursor(0, 1);
+          lcd.print("Opened");
+          openDoor(i, true);
         }
 
         String notReserve = "locker number " + String(i) + " not reserve";
