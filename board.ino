@@ -21,10 +21,10 @@ const char keys[4][3] = {
 const char* ssid = "";
 const char* pass = "";
 
-const char *mqtt_broker = "";
-const char *mqtt_client = "";
-const char *mqtt_username = "";
-const char *mqtt_password = "";
+const char *mqtt_broker = "mqtt.netpie.io";
+const char *mqtt_client = "32a25e63-9a98-42fb-97cd-71b44deb425b";
+const char *mqtt_username = "mkQoo85MdVoFQzqZtFY4L81cFdQv2EWB";
+const char *mqtt_password = "EaiywoVTMx36v5oy1LTLak1CXFjrukzm";
 const int mqtt_port = 1884;
 
 WiFiClientSecure espClient;
